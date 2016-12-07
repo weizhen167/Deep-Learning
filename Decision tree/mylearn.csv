@@ -8,8 +8,5 @@
 7,yong,high,yes,fair,N
 8,old,high,no,fair,Y
 9,middle,low,yes,excellent,N
-10,yong,high,yes,excellent,Y
-11,old,low,no,fair,Y
-12,middle,medium,no,excellent,N
-13,yong,low,yes,fair,Y
-14,old,medium,no,excellent,Y
+10,old,low,no,fair,Y
+11,old,medium,no,excellent,Y

@@ -2,6 +2,7 @@ from sklearn.feature_extraction import DictVectorizer
 import csv
 from sklearn import preprocessing
 from sklearn import tree
+import numpy as np
 
 
 data_file = "mylearn.csv"
@@ -47,7 +48,19 @@ newRowX = oneRowX
 
 newRowX[0] = 1
 newRowX[2] = 0
-print('oneRowX; ' + str(newRowX))
+print('newRowX; ' + str(newRowX))
+
+newRowX=newRowX.reshape(1,-1)
+print('after reshape; ' + str(newRowX))
 
 predictedY = clf.predict(newRowX)
+
 print "predictedY: " + str(predictedY)
+'''
+
+
+
+
+
+
+'''
