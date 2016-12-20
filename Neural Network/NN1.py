@@ -33,31 +33,42 @@ class NeuralNetwork:
 
         #init the weights, give all of the start weights a random value.
         self.weights = []
+        #2 layers NN
+        #first level has layers[i-1] unit, plus bias point = layers[i-1]+1 units
+        #every level has + 1 except output layer because the bias unit.
         for i in range(1,len(layers)-1):
             self.weights.append((2*np.random.random((layers[i-1]+1, layers[i] + 1))-1)*0.25)
             self.weights.append((2*np.random.random((layers[i] + 1, layers[i + 1]))-1)*0.25)
-        #print str(self.weights)
 
 
     def fit(self,x,y,learning_rate=0.2,epochs=10000):
-        x = np.atleast_2d(x)
-        temp = np.ones([x.shape[0],x.shape[1]+1])
-        temp[:,0:-1] = x
-        x=temp
-        #print str(x)
-        y=np.array(y)
-        for k in range(epochs):
-            #print "**************" + str(k) + "**************"
-            i = np.random.randint(x.shape[0])
+        x = np.atleast_2d(x) #confirm x is atleast 2d
+        temp = np.ones([x.shape[0],x.shape[1]+1]) # init a [x.shape[0],x.shape[1]+1] matrix with all values 1
+        temp[:,0:-1] = x  #put x into this matrix , should have extra line for the bias values
+        x=temp #pass value
+        y=np.array(y) #transfer y to a matrix
+
+        for k in range(epochs): #doing epochs times training
+            i = np.random.randint(x.shape[0]) #randomly select a row into training
             a=[x[i]]
 
-            for l in range(len(self.weights)):
+            for l in range(len(self.weights)): #when l in the number of layers
+                # append dot multiply a[l] and self.weights[l]
+                # then use activation functions to process these values
+                print "nei ji 1 = " + str(np.dot(a[l], self.weights[l]))
                 a.append(self.activation(np.dot(a[l],self.weights[l])))
-            error = y[i] - a[-1]
+                print str(a)
+
+            error = y[i] - a[-1]  #error is ?
+
+            #deltas is error *
             deltas = [error*self.activation_deriv(a[-1])]
+
+
             for l in range(len(a)-2,0,-1):
                 deltas.append(deltas[-1].dot(self.weights[l].T)*self.activation_deriv(a[l]))
             deltas.reverse()
+
             for i in range(len(self.weights)):
                 layer = np.atleast_2d((a[i]))
                 delta = np.atleast_2d(deltas[i])
