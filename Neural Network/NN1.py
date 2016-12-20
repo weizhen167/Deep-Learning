@@ -23,7 +23,7 @@ class NeuralNetwork:
         # layers is a list that contains how many units in each layer.
         # for example: [5,2,2]
         # means first layer 5 units, second layer 2 units, third layer 2 units
-        print str(layers)
+        #print str(layers)
         if(activation == 'logistic'):
             self.activation = logistic
             self.activation_deriv=logistic_derivative
@@ -34,21 +34,28 @@ class NeuralNetwork:
         #init the weights, give all of the start weights a random value.
         self.weights = []
         for i in range(1,len(layers)-1):
-            print i
-            print (layers[i-1]+1, layers[i] + 1  )
-            print (layers[i]  +1, layers[i  + 1] )
+            #print i
+            #print (layers[i-1]+1, layers[i] + 1  )
+            #print (layers[i]  +1, layers[i  + 1] )
             #print np.random.random((layers[i-1]+1, layers[i] + 1))
-            self.weights.append((2*np.random.random((layers[i-1]+1, layers[i] + 1)) - 1)*0.25)
-            self.weights.append((2*np.random.random((layers[i] + 1, layers[i + 1])) - 1)*0.25)
+            #print '[][][]['
+            #print 2 * np.random.random((layers[i - 1] + 1, layers[i] + 1))
+            #self.weights = [np.random.randn(layers[i - 1] + 1, layers[i] + 1) / 10 for i in range(1, len(layers) - 1)]
+            #self.weights.append(np.random.randn(layers[-2] + 1, layers[-1]) / 10)
+            self.weights.append(np.random.random((layers[i-1]+1, layers[i] + 1))/10*0.25)
+            self.weights.append((np.random.random((layers[i] + 1, layers[i + 1])))/10*0.25)
+        #print str(self.weights)
+
 
     def fit(self,x,y,learning_rate=0.2,epochs=10000):
         x = np.atleast_2d(x)
         temp = np.ones([x.shape[0],x.shape[1]+1])
         temp[:,0:-1] = x
         x=temp
+        #print str(x)
         y=np.array(y)
         for k in range(epochs):
-            print str(self.weights) + "**************" + str(k) + "**************"
+            #print "**************" + str(k) + "**************"
             i = np.random.randint(x.shape[0])
             #print str("random number\n" + str(i))
             a=[x[i]]
@@ -56,6 +63,7 @@ class NeuralNetwork:
 
             for l in range(len(self.weights)):
                 #print str("----------------------------------8\n" + str(a))
+                #print l
                 #print str(a[l])
                 #print str(self.weights[l])
                 #print str("np.dot(a[l],self.weights[l]) 8.5\n" + str(np.dot(a[l], self.weights[l])))
@@ -86,33 +94,33 @@ class NeuralNetwork:
     def predict(self,x):
         #print self.weights
         x = np.array(x)
-        print "----------------------------------\n"+str(x)
+        #print "----------------------------------\n"+str(x)
         temp = np.ones(x.shape[0]+1)
         temp[0:-1]=x
         a=temp
-        print str(a)
+        #print str(a)
         for l in range(len(self.weights)):
-            print str((a,self.weights[l])) + "wowowowowow"
-            print str(np.dot(a,self.weights[l])) +"hohohohohohoho"
+            #print str((a,self.weights[l])) + "wowowowowow"
+            #print str(np.dot(a,self.weights[l])) +"hohohohohohoho"
             a=self.activation(np.dot(a,self.weights[l]))
-            print str(a) + "HAHAHAHAHAHA"
+            #print str(a) + "HAHAHAHAHAHA"
         return a
 
 if __name__ == '__main__':
-    nn = NeuralNetwork([2,2,1],'tanh')
-    x = np.array([[0,0],[0,1],[1,0],[1,1]])
-    y = np.array([0,1,1,0])
-    nn.fit(x,y)
-    print nn.weights
-    print "len of weight " + str(len(nn.weights))
-    for i in [[0,0],[0,1],[1,0],[1,1]]:
+    nn = NeuralNetwork([2, 2, 1], 'tanh')
+    x = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+    y = np.array([1, 0, 0, 1])
+    nn.fit(x, y)
+    # print nn.weights
+    # print "len of weight " + str(len(nn.weights))
+    for i in [[0, 0], [0, 1], [1, 0], [1, 1]]:
         ss = str(nn.predict(i))
         print i, ss
-        if(nn.predict(i) < 0.5):
+        if (ss < 0.5):
             pass
-            #print (i,"0")
+            # print (i,"0")
 
         else:
             pass
-            #print (i,"1")
+            # print (i,"1")
 
