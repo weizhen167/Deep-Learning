@@ -6,7 +6,7 @@ def tanh(x):
     return np.tanh(x)
 # tanh activation method
 def tanh_deriv(x):
-    return np.tanh(x)*(1.0 - np.tanh(x))
+    return 1.0 - np.tanh(x)*np.tanh(x)
 
 # logistic method
 def logistic(x):
@@ -34,16 +34,8 @@ class NeuralNetwork:
         #init the weights, give all of the start weights a random value.
         self.weights = []
         for i in range(1,len(layers)-1):
-            #print i
-            #print (layers[i-1]+1, layers[i] + 1  )
-            #print (layers[i]  +1, layers[i  + 1] )
-            #print np.random.random((layers[i-1]+1, layers[i] + 1))
-            #print '[][][]['
-            #print 2 * np.random.random((layers[i - 1] + 1, layers[i] + 1))
-            #self.weights = [np.random.randn(layers[i - 1] + 1, layers[i] + 1) / 10 for i in range(1, len(layers) - 1)]
-            #self.weights.append(np.random.randn(layers[-2] + 1, layers[-1]) / 10)
-            self.weights.append(np.random.random((layers[i-1]+1, layers[i] + 1))/10*0.25)
-            self.weights.append((np.random.random((layers[i] + 1, layers[i + 1])))/10*0.25)
+            self.weights.append((2*np.random.random((layers[i-1]+1, layers[i] + 1))-1)*0.25)
+            self.weights.append((2*np.random.random((layers[i] + 1, layers[i + 1]))-1)*0.25)
         #print str(self.weights)
 
 
@@ -57,62 +49,34 @@ class NeuralNetwork:
         for k in range(epochs):
             #print "**************" + str(k) + "**************"
             i = np.random.randint(x.shape[0])
-            #print str("random number\n" + str(i))
             a=[x[i]]
-            #print str("choose a random row of the input\n" + str(a))
 
             for l in range(len(self.weights)):
-                #print str("----------------------------------8\n" + str(a))
-                #print l
-                #print str(a[l])
-                #print str(self.weights[l])
-                #print str("np.dot(a[l],self.weights[l]) 8.5\n" + str(np.dot(a[l], self.weights[l])))
-                #print str("np activation")
                 a.append(self.activation(np.dot(a[l],self.weights[l])))
-
-                #print str("append all of the values after activation 8.5\n" + str(a))
             error = y[i] - a[-1]
-            #print str(y[i]) + "-" + str(a[-1])
-           # print str("-------------------error is-------9\n" + str(error))
             deltas = [error*self.activation_deriv(a[-1])]
-            #print str("----------------------------------10\n" + str(deltas))
-
-            #print str("----------------------------------11\n" + str(range(len(a)-2,0,-1)))
             for l in range(len(a)-2,0,-1):
                 deltas.append(deltas[-1].dot(self.weights[l].T)*self.activation_deriv(a[l]))
-             #   print str("----------------------------------12\n" + str(deltas))
             deltas.reverse()
-            #print str("----------------------------------13\n" + str(deltas))
-            #print str("----------------------------------14\n" + str(len(self.weights)))
             for i in range(len(self.weights)):
                 layer = np.atleast_2d((a[i]))
-             #   print str("----------------------------------15\n" + str(layer))
                 delta = np.atleast_2d(deltas[i])
-             #   print str("----------------------------------16\n" + str(layer))
                 self.weights[i] += learning_rate * layer.T.dot(delta)
 
     def predict(self,x):
-        #print self.weights
         x = np.array(x)
-        #print "----------------------------------\n"+str(x)
         temp = np.ones(x.shape[0]+1)
         temp[0:-1]=x
         a=temp
-        #print str(a)
-        for l in range(len(self.weights)):
-            #print str((a,self.weights[l])) + "wowowowowow"
-            #print str(np.dot(a,self.weights[l])) +"hohohohohohoho"
+        for l in range(0,len(self.weights)):
             a=self.activation(np.dot(a,self.weights[l]))
-            #print str(a) + "HAHAHAHAHAHA"
         return a
 
 if __name__ == '__main__':
     nn = NeuralNetwork([2, 2, 1], 'tanh')
     x = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
-    y = np.array([1, 0, 0, 1])
+    y = np.array([0, 1, 1, 0])
     nn.fit(x, y)
-    # print nn.weights
-    # print "len of weight " + str(len(nn.weights))
     for i in [[0, 0], [0, 1], [1, 0], [1, 1]]:
         ss = str(nn.predict(i))
         print i, ss
