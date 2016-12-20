@@ -15,13 +15,8 @@ print (__doc__)
 
 #print log info
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
-
-
 #data download (labeled faces in the wild (lfw) people dataset)
-#The extracted dataset will only retain pictures of people that
-# have at least min_faces_per_person different pictures
-lfw_people = fetch_lfw_people(min_faces_per_person=220, resize=1)
-
+lfw_people = fetch_lfw_people(min_faces_per_person=10, resize=0.4)
 
 #return number of samples, h value, w value
 n_samples, h, w = lfw_people.images.shape
@@ -35,7 +30,7 @@ target_names = lfw_people.target_names
 n_classes = target_names.shape[0]
 
 
-print ("Total dataset size: " + str(lfw_people))
+print ("Total dataset size: " + lfw_people)
 print ("n_samples: %d" % n_samples)
 print ("n_features: %d" % n_features)
 print ("n_classes: %d" % n_classes)
@@ -44,7 +39,7 @@ print ("n_classes: %d" % n_classes)
 X_train, X_test, Y_train, Y_test = train_test_split(x, y, test_size=0.25)
 
 #parm components
-n_components = 15
+n_components = 50
 print ("Extracting the top %d eigenfaces from %d face" % (n_components, X_train.shape[0]))
 t0 = time()
 pca = PCA(svd_solver='randomized',n_components=n_components, whiten=True).fit(X_train)
@@ -52,7 +47,7 @@ print("done in %0.3fs" % (time() - t0))
 
 
 eigenfaces = pca.components_.reshape((n_components, h, w))
-print ("Projecting the input data on the eigenfaces orthonrmal basis")
+print ("Projecting the imput data on the eigenfaces orthonrmal basis")
 t0 = time()
 X_train_pca = pca.transform(X_train)
 X_test_pca = pca.transform(X_test)
