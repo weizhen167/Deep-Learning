@@ -79,7 +79,7 @@ class Perceptron(object):
         #print 'self.basis' + str(self.bias)
         #print '\n'
 
-def f1(x):
+def f(x):
     '''
     define activaction function
     '''
@@ -98,7 +98,7 @@ def get_training_dataset():
 
 def train_and_perceptron():
     # training NN, input parmater as '2' (and is a 2 parmater function), activation is f
-    p = Perceptron(2, f2)
+    p = Perceptron(2, f)
     # train 10 rounds, learning rate is 0.1
     input_vecs, labels = get_training_dataset()
     p.train(input_vecs, labels, 100, 0.1)
