@@ -3,8 +3,8 @@ import Connections, Layer,Connection
 class Network(object):
     def __init__(self, layers):
         '''
-        初始化一个全连接神经网络
-        layers: 二维数组，描述神经网络每层节点数
+        init a full coeection NN
+        layers: 2d array, discribe how many nodes in each layer
         '''
         self.connections = Connections()
         self.layers = []
@@ -20,25 +20,37 @@ class Network(object):
                 self.connections.add_connection(conn)
                 conn.downstream_node.append_upstream_connection(conn)
                 conn.upstream_node.append_downstream_connection(conn)
+
+
+
+
     def train(self, labels, data_set, rate, iteration):
         '''
-        训练神经网络
-        labels: 数组，训练样本标签。每个元素是一个样本的标签。
-        data_set: 二维数组，训练样本特征。每个元素是一个样本的特征。
+        train NN
+        labels: array,train sample tags. each element is a sample tag.
+        data_set: 2d array,features of train sample. each element is a feature.
         '''
         for i in range(iteration):
             for d in range(len(data_set)):
                 self.train_one_sample(labels[d], data_set[d], rate)
+
+
+
+
     def train_one_sample(self, label, sample, rate):
         '''
-        内部函数，用一个样本训练网络
+        interinal, run one time
         '''
         self.predict(sample)
         self.calc_delta(label)
         self.update_weight(rate)
+
+
+
+
     def calc_delta(self, label):
         '''
-        内部函数，计算每个节点的delta
+        internal, calcuelate delta of each node.
         '''
         output_nodes = self.layers[-1].nodes
         for i in range(len(label)):
@@ -46,43 +58,56 @@ class Network(object):
         for layer in self.layers[-2::-1]:
             for node in layer.nodes:
                 node.calc_hidden_layer_delta()
+
+
+
+
+
     def update_weight(self, rate):
         '''
-        内部函数，更新每个连接权重
+        internal function, update W of each connection
         '''
         for layer in self.layers[:-1]:
             for node in layer.nodes:
                 for conn in node.downstream:
                     conn.update_weight(rate)
+
+
+
+
     def calc_gradient(self):
         '''
-        内部函数，计算每个连接的梯度
+        internal function, calcuelate gradient of each connection
         '''
         for layer in self.layers[:-1]:
             for node in layer.nodes:
                 for conn in node.downstream:
                     conn.calc_gradient()
+
+
+
+
     def get_gradient(self, label, sample):
         '''
-        获得网络在一个样本下，每个连接上的梯度
-        label: 样本标签
-        sample: 样本输入
+        under a NN sample, calc gradient of each connection
+        label: sample lable
+        sample: sample input
         '''
         self.predict(sample)
         self.calc_delta(label)
         self.calc_gradient()
+
+
     def predict(self, sample):
         '''
-        根据输入的样本预测输出值
-        sample: 数组，样本的特征，也就是网络的输入向量
+        predict
+        sample: arrrary,features,
         '''
         self.layers[0].set_output(sample)
         for i in range(1, len(self.layers)):
             self.layers[i].calc_output()
         return map(lambda node: node.output, self.layers[-1].nodes[:-1])
+
     def dump(self):
-        '''
-        打印网络信息
-        '''
         for layer in self.layers:
             layer.dump()

@@ -3,9 +3,7 @@ import random
 class Connection(object):
     def __init__(self, upstream_node, downstream_node):
         '''
-        初始化连接，权重初始化为是一个很小的随机数
-        upstream_node: 连接的上游节点
-        downstream_node: 连接的下游节点
+        init connections, start W is a very small random int
         '''
         self.upstream_node = upstream_node
         self.downstream_node = downstream_node
