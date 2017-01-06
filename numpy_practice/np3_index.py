@@ -36,10 +36,10 @@ print d_2
 print
 print '----------part2---------- \n\n'
 
+print a
 print '\nreturn all the rows in a'
 for row in a:
     print row
-
 print '\nreturn all the columns in a'
 for column in a.T:
     print column
@@ -106,7 +106,6 @@ print
 print '----------part4---------- \n\n'
 #cut array
 
-
 a = np.arange(12).reshape(3,4)
 print '\na is: '
 print a
@@ -120,7 +119,6 @@ print b
 c = np.array_split(a,3,axis=1)
 print '\nc is: '
 print c
-
 
 d = np.vsplit(a,3)
 print '\nd is: '
