@@ -85,7 +85,6 @@ b_3 = np.median((a))
 print 'b_3 is: '
 print b_3
 
-#lei he
 c = np.cumsum(a)
 print 'c is: '
 print c
