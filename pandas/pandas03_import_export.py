@@ -101,7 +101,7 @@ print '\n'
 print res1
 print '\n'
 print res2
-print '\n'
+print '\n\n'
 print res3
 
 
